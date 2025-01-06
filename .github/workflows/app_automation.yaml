@@ -33,6 +33,7 @@ jobs:
           git secrets --add 'AKIA[0-9A-Z]{16}'  # Adding AWS pattern to avoid false positives
           git secrets --add 'AZURE[0-9A-Z]{16}'  # Add Azure client secret pattern
 
+
       - name: Create target repository if it doesn't exist
         run: |
           echo "Checking if the repository ${{ github.event.inputs.targetrepo }} exists in ${{ github.event.inputs.orgname }}..."
@@ -79,7 +80,7 @@ jobs:
           repository: ${{ github.event.inputs.orgname }}/CentralizedRepo
           token: ${{ secrets.GIT_PAT }}  # Personal Access Token (PAT)
           ref: main
-
+      
       - name: Clone the target repository
         run: |
           # Ensure that git is available
@@ -94,6 +95,21 @@ jobs:
           # List the contents of the cloned repository
           echo "Contents of the cloned repository:"
           ls -R .
+          
+
+      - name: Install git-secrets in the target repo
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git-secrets
+          git secrets --register-aws --global
+          git secrets --add 'AKIA[0-9A-Z]{16}'
+          git secrets --add 'AZURE[0-9A-Z]{16}'
+          
+      - name: Run git-secrets scan in the repo
+        run: |
+          # Ensure we're inside a Git repository
+          echo "Running git-secrets scan..."
+          git secrets --scan
 
       - name: List files in the app repo
         run: |
