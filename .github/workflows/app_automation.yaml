@@ -104,7 +104,13 @@ jobs:
       
       - name: Run git-secrets scan in the repo
         run: |
-          # Ensure we're inside the cloned Git repository
+          # Ensure we're inside the correct Git repository directory
+          echo "Current directory:"
+          pwd
+          echo "Contents of the current directory:"
+          ls -R .
+      
+          # Run git-secrets scan
           echo "Running git-secrets scan..."
           git secrets --scan
           
