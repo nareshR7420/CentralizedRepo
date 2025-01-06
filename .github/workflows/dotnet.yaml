@@ -80,10 +80,18 @@ jobs:
       - name: Check secret value
         run: echo "My secret is ${{ secrets.AZURE_CREDENTIALS }}"
       
+      # - name: Setup Azure Login using Service Principal
+      #   uses: azure/login@v1
+      #   with:
+      #     creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Setup Azure Login using Service Principal
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+        run: |
+          # Login to Azure using service principal
+          az login --service-principal \
+            -u a2d89136-b086-4755-9f98-af856c2d8c30 \
+            -p QEt8Q~el5WQ8JWv56IsRMvM5mSJeMHsflwyEJbQ7 \
+            --tenant 13085c86-4bcb-460a-a6f0-b373421c6323
+
           
       - name: Download Artifact
         uses: actions/download-artifact@v3
