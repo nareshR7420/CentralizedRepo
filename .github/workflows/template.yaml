@@ -35,11 +35,18 @@ jobs:
         echo "Listing the contents of the working directory..."
         ls -al $GITHUB_WORKSPACE
 
-    # Step 3: Setup Azure CLI (if required for deployment)
+    # # Step 3: Setup Azure CLI (if required for deployment)
+    # - name: Setup Azure Login using Service Principal
+    #   uses: azure/login@v1
+    #   with:
+    #     creds: ${{ secrets.AZURE_CREDENTIALS }}  # Service Principal credentials in JSON format
     - name: Setup Azure Login using Service Principal
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}  # Service Principal credentials in JSON format
+      run: |
+        # Login to Azure using service principal
+        az login --service-principal \
+          -u a2d89136-b086-4755-9f98-af856c2d8c30 \
+          -p QEt8Q~el5WQ8JWv56IsRMvM5mSJeMHsflwyEJbQ7 \
+          --tenant 13085c86-4bcb-460a-a6f0-b373421c6323
 
     # Step 4: Set up Go
     - name: Set up Go ${{ env.GO_VERSION }}
